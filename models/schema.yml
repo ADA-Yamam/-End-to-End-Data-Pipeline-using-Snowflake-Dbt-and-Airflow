@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  # 1. Documentation & Tests for Staging Layer
+  - name: stg_sales
+    description: "Cleaned and standardized sales data from Snowflake."
+    columns:
+      - name: product_name
+        description: "Product name converted to uppercase and trimmed."
+        tests:
+          - not_null
+
+      - name: sales_date
+        description: "The date when the transaction occurred."
+        tests:
+          - not_null
+
+  # 2. Documentation & Tests for Analytics Layer (Marts)
+  - name: fct_sales_summary
+    description: "Final aggregated sales performance table by product and region."
+    columns:
+      - name: product_name
+        description: "Primary key for product."
+        tests:
+          - not_null
+
+      - name: total_revenue
+        description: "Total gross revenue after cleaning."
+        tests:
+          - not_null
+
+      - name: total_profit
+        description: "Net profit calculated as Revenue minus Marketing Spend."
+        tests:
+          - not_null
+
+      - name: return_rate_pct
+        description: "Percentage of units returned. Must be between 0 and 100."
+        tests:
+          - not_null
+
+# 3. New Section: Documentation for Reusable Macros
+macros:
+  - name: clean_string
+    description: "Standardizes text by trimming spaces and converting to uppercase."
+    
+  - name: format_money
+    description: "Casts numeric values to numeric(16,2) for consistent financial rounding."
+    
+  - name: safe_divide_pct
+    description: "Calculates percentage and prevents 'Division by Zero' errors."
